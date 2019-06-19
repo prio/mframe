@@ -1,6 +1,5 @@
 import operator
 import types
-from tabulate import tabulate
 
 
 class Series:
@@ -177,10 +176,12 @@ class DataFrame(object):
         return self.to_pandas()
 
     def head(self, num=5):
+        from tabulate import tabulate
         cut_values = zip(*[v[:num] for v in self._values])
         return tabulate(cut_values, headers=self._columns)
 
     def tail(self, num=5):
+        from tabulate import tabulate
         cut_values = zip(*[v[len(v)-num:] for v in self._values])
         return tabulate(cut_values, headers=self._columns)
 
