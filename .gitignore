@@ -1,3 +1,7 @@
 *.class
 __pycache__
 *.pyc
+build
+dist
+.ipynb*
+mframe.egg-info
