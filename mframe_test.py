@@ -112,42 +112,11 @@ class TestDataFrame(unittest.TestCase):
         except AttributeError:
             pass
 
-    def test_where(self):
-        results = self.df.where('date').eq('2019-01-02')
-        self.assertListEqual(
-            [False]*3 + [True]*3 + [False]*12,
-            list(results)
-        )
-        results = self.df.where('date').gte('2019-01-03')
-        self.assertListEqual(
-            [False]*6 + [True]*12,
-            list(results)
-        )
-
     def test_iterrows(self):
         rows = list(self.pdf.iterrows())
         self.assertEqual(12, len(rows))
         self.assertEqual('aapl', rows[0]['tick'])
         self.assertEqual('msft', rows[5]['tick'])
-
-    def test_features(self):        
-        self.df['date'] = self.df['date'].apply(str_to_dt)
-        self.df['price'] = self.df['price'].apply(to_float)
-        
-        self.pdf['date'] = self.pdf['date'].apply(str_to_dt)        
-        self.pdf['position'] = self.pdf['position'].apply(lambda x: x.strip())
-        
-        for row in self.pdf.iterrows():            
-            self.df.set(
-                [self.df.where('date').gte(row['date']), self.df.where('tick').eq(row['tick'])],
-                'position',
-                row['position']
-            )
-
-        for actual, expected in zip(self.df.iterrows(), expected_result):
-            self.assertEqual(actual['tick'], expected['tick'])
-            self.assertEqual(actual['price'], expected['price'])
-            self.assertEqual(actual['position'], expected['position'])
 
 
 class TestDataFrameSugar(unittest.TestCase):

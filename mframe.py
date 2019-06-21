@@ -129,30 +129,6 @@ class DataFrame(object):
             else:
                 _values.append(current_value)
         self._values[idx] = _values            
-
-    # TODO Remove? 
-    def where(self, column):
-        self._slot('_selected_column', column)
-        return self
-    # TODO Remove?
-    def _compare(self, compare_value, op):
-        idx = self._columns.index(self._selected_column)
-        _res = []
-        for value in self._values[idx]:
-            try:
-                if op(value, compare_value):
-                    _res.append(True)
-                else:
-                    _res.append(False)
-            except TypeError as e:
-                raise TypeError('Unable to compare "{}" and "{}". {}'.format(value, compare_value, e))
-        return _res
-    # TODO Remove?
-    def gte(self, compare_value):
-        return self._compare(compare_value, operator.ge)
-    # TODO Remove?
-    def eq(self, compare_value):
-        return self._compare(compare_value, operator.eq)
                 
     def iterrows(self):
         for i in range(len(self)):
