@@ -5,7 +5,7 @@ MFrame - A minimal DataFrame
 
 A lightweight single file DataFrame implementation that works on older Python distrubtions such as Jython.
 
-I use it with Java data tools such as .. _Streamsets: https://streamsets.com/
+I use it with Java data tools such as `Streamsets <https://streamsets.com/>`_.
 
 Feel free to fork, add tests and features and make a pull request.
 
