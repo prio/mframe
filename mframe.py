@@ -1,17 +1,56 @@
 import operator
 import types
+import datetime as dt
+
+
+def parse_date(sdt):
+    if isinstance(sdt, dt.datetime):
+        return sdt
+    # Limited support to guess datetime formats
+    patterns = [
+        '%Y-%m-%d', '%Y-%d-%m', '%d-%m-%Y',
+        '%Y-%m-%d %H:%M:%S',
+        # ISO 8601, offset (%z) not supported in Jython :(
+        '%Y-%m-%dT%H:%M:%S',
+        '%Y-%m-%dT%H:%M:%SZ',
+        '%Y%m%dT%H%M%SZ',
+    ]
+    for pattern in patterns:
+        try:
+            return dt.datetime.strptime(sdt, pattern)
+        except:
+            pass
+    raise TypeError("{} is not a recognized datetime format".format(sdt))
 
 
 class Series:
-    __slots__ = ['data']
+    __slots__ = ['data', 'dtype']
 
     def __init__(self, data):
         self.data = data
+        self.dtype = self._dtype()
+
+    def _dtype(self):
+        if len(self) > 0 and isinstance(self.data[0], dt.datetime):
+            return 'datetime'
+        else:
+            return 'object'
 
     def __iter__(self):
         return iter(self.data)
 
+    def _dt_conversion(self, other):
+        if isinstance(other, list):
+            _other = []
+            for o in other:                
+                _other.append(parse_date(o))
+            return _other
+        else:
+            return parse_date(other)
+
     def _compare(self, other, op):
+        if self.dtype == 'datetime':
+            other = self._dt_conversion(other)
         if isinstance(other, list):
             return op(self.data, other)
         else:

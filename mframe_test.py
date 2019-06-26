@@ -1,5 +1,5 @@
 import unittest
-from mframe import DataFrame, Series
+from mframe import DataFrame, Series, parse_date
 import datetime as dt
 from tabulate import tabulate
 
@@ -188,6 +188,47 @@ class TestDataFrameSugar(unittest.TestCase):
             self.assertEqual(actual['tick'], expected['tick'])
             self.assertEqual(actual['price'], expected['price'])
             self.assertEqual(actual['position'], expected['position'])
+
+
+class TestTimeSeries(unittest.TestCase):
+    def setUp(self):
+        self.df = DataFrame(tickers)
+        self.df['date'] = self.df['date'].apply(str_to_dt)
+
+    def test_parse_date(self):
+        dates = [ 
+            '2019-26-06', 
+            '26-06-2019',
+            '2019-06-26',
+            '2019-06-26T10:54:55',
+            '2019-06-26T10:54:55Z',
+            '20190626T105455Z',
+            '2019-01-01 00:00:00',
+        ]
+        for date in dates:
+            try:
+                parse_date(date)
+            except:
+                self.fail('Should have parsed {} correctly'.format(date))
+        try:
+            parse_date('31-31-31')
+            self.fail('Should have raised a TypeError')
+        except TypeError:
+            pass
+
+
+    def test_filter_with_string_dates(self):
+        d3 = dt.datetime(2019, 1, 3, 0, 0)
+        d4 = dt.datetime(2019, 1, 4, 0, 0)
+        d5 = dt.datetime(2019, 1, 5, 0, 0)
+        d6 = dt.datetime(2019, 1, 6, 0, 0)
+
+        df = self.df[self.df['date'] >= '2019-01-03']
+        self.assertEqual(12, len(df))
+        self.assertListEqual(
+            [d3]*3 + [d4]*3 + [d5]*3 + [d6]*3,
+            list(df['date']),
+        )
 
 
 if __name__ == '__main__':
