@@ -1,11 +1,24 @@
 import unittest
-from mframe import DataFrame, Series, parse_date
+from mframe import DataFrame, Series, parse_date, IS_JYTHON
 import datetime as dt
+import time
 from tabulate import tabulate
+
+
+def jython_only(f):
+    def wrapper(*args, **kwargs):
+        if IS_JYTHON:
+            f(*args, **kwargs)
+    return wrapper
 
 
 def str_to_dt(s):
     return dt.datetime.strptime(s, '%Y-%m-%d')
+
+
+def str_to_java_date(s):
+    from java.text import SimpleDateFormat
+    return SimpleDateFormat('yyy-MM-dd').parse(s)
 
 
 def to_float(f):
@@ -229,6 +242,47 @@ class TestTimeSeries(unittest.TestCase):
             [d3]*3 + [d4]*3 + [d5]*3 + [d6]*3,
             list(df['date']),
         )
+
+
+class TestJavaTimeSeries(unittest.TestCase):
+    def setUp(self):
+        self.df = DataFrame(tickers)
+
+    @jython_only
+    def test_filter_with_java_date(self):
+        from java.util import GregorianCalendar, Calendar
+
+        self.df['date'] = self.df['date'].apply(str_to_dt)
+        date = GregorianCalendar(2019, Calendar.JANUARY, 3).getTime()
+
+        d3 = dt.datetime(2019, 1, 3, 0, 0)
+        d4 = dt.datetime(2019, 1, 4, 0, 0)
+        d5 = dt.datetime(2019, 1, 5, 0, 0)
+        d6 = dt.datetime(2019, 1, 6, 0, 0)
+
+        df = self.df[self.df['date'] >= date]
+        self.assertEqual(12, len(df))
+        self.assertListEqual(
+            [d3]*3 + [d4]*3 + [d5]*3 + [d6]*3,
+            list(df['date']),
+        )        
+
+    @jython_only
+    def test_filter_with_java_dates(self):
+        from java.util import GregorianCalendar, Calendar
+        self.df['date'] = self.df['date'].apply(str_to_java_date)
+
+        d3 = GregorianCalendar(2019, Calendar.JANUARY, 3).getTime()
+        d4 = GregorianCalendar(2019, Calendar.JANUARY, 4).getTime()
+        d5 = GregorianCalendar(2019, Calendar.JANUARY, 5).getTime()
+        d6 = GregorianCalendar(2019, Calendar.JANUARY, 6).getTime()
+
+        df = self.df[self.df['date'] >= '2019-01-03']
+        self.assertEqual(12, len(df))
+        self.assertListEqual(
+            [d3]*3 + [d4]*3 + [d5]*3 + [d6]*3,
+            list(df['date']),
+        ) 
 
 
 if __name__ == '__main__':

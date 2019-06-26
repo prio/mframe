@@ -3,9 +3,20 @@ import types
 import datetime as dt
 
 
+IS_JYTHON = False
+try:
+    import java.util.Date as JavaDate
+    IS_JYTHON = True
+except ImportError:
+    pass
+
+
 def parse_date(sdt):
     if isinstance(sdt, dt.datetime):
         return sdt
+    if IS_JYTHON and isinstance(sdt, JavaDate):
+        return dt.datetime.fromtimestamp(sdt.getTime()/1000)
+
     # Limited support to guess datetime formats
     patterns = [
         '%Y-%m-%d', '%Y-%d-%m', '%d-%m-%Y',
@@ -31,10 +42,12 @@ class Series:
         self.dtype = self._dtype()
 
     def _dtype(self):
-        if len(self) > 0 and isinstance(self.data[0], dt.datetime):
-            return 'datetime'
-        else:
-            return 'object'
+        if len(self) > 0:
+            if isinstance(self.data[0], dt.datetime):
+                return 'datetime'
+            elif IS_JYTHON and isinstance(self.data[0], JavaDate):
+                return 'datetime'
+        return 'object'
 
     def __iter__(self):
         return iter(self.data)
