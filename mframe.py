@@ -42,22 +42,16 @@ class Series:
         self.dtype = self._dtype()
 
     def _dtype(self):
-        if len(self) > 0:
-            if isinstance(self.data[0], dt.datetime):
-                return 'datetime'
-            elif IS_JYTHON and isinstance(self.data[0], JavaDate):
-                return 'datetime'
+        if len(self) > 0 and isinstance(self.data[0], dt.datetime) or (IS_JYTHON and isinstance(self.data[0], JavaDate)):
+            return 'datetime'
         return 'object'
 
     def __iter__(self):
         return iter(self.data)
 
     def _dt_conversion(self, other):
-        if isinstance(other, list):
-            _other = []
-            for o in other:                
-                _other.append(parse_date(o))
-            return _other
+        if isinstance(other, (list, Series)):
+            return [parse_date(o) for o in other]
         else:
             return parse_date(other)
 
@@ -67,16 +61,10 @@ class Series:
         if isinstance(other, list):
             return op(self.data, other)
         else:
-            values = []            
-            for data in self.data:
-                values.append(op(data, other))            
-            return Series(values)
+            return Series([op(data, other) for data in self.data])
 
     def apply(self, fn):
-        _values = []
-        for value in self.data:
-            _values.append(fn(value))
-        self.data = _values
+        self.data = [fn(value) for value in self.data]
         return Series(self.data)
 
     def __getitem__(self, idx):
@@ -98,10 +86,7 @@ class Series:
         return self._compare(other, operator.lt)
 
     def __and__(self, other):
-        combination = []
-        for b1, b2 in zip(self.data, other):
-            combination.append(all([b1, b2]))
-        return Series(combination)
+        return Series([all([b1, b2]) for b1, b2 in zip(self.data, other)])
 
     def __len__(self):
         return len(self.data)
