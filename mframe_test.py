@@ -186,6 +186,30 @@ class TestDataFrameSugar(unittest.TestCase):
             list(df['date']),
         )        
 
+    def test_drop(self):
+        results = self.df['date'] == '2019-01-02'
+        self.assertEqual(18, len(self.df))
+        self.df.drop(results)
+        self.assertEqual(15, len(self.df))
+        
+        results = self.df['date'] == '2019-01-02'
+        self.assertEqual(0, len(self.df[results]))
+
+        results = self.df['date'] == '2019-01-01'
+        self.assertEqual(3, len(self.df[results]))
+        results = self.df['date'] == '2019-01-03'
+        self.assertEqual(3, len(self.df[results]))
+        results = self.df['date'] == '2019-01-04'
+        self.assertEqual(3, len(self.df[results]))
+        results = self.df['date'] == '2019-01-05'
+        self.assertEqual(3, len(self.df[results]))
+        results = self.df['date'] == '2019-01-06'
+        self.assertEqual(3, len(self.df[results]))
+
+    def test_drop_all(self):
+        self.df.drop('all')
+        self.assertEqual(0, len(self.df))        
+
     def test_features(self):        
         self.df['date'] = self.df['date'].apply(str_to_dt)
         self.df['price'] = self.df['price'].apply(to_float)

@@ -147,6 +147,17 @@ class DataFrame(object):
             mask = _index   
         return mask
 
+    def drop(self, mask):
+        mask = self._get_row_filter(mask)
+        _values = []
+        for row in self._values:
+            _row_values = []
+            for i, remove in enumerate(mask):
+                if not remove:
+                    _row_values.append(row[i])
+            _values.append(_row_values)
+        self._slot('_values', _values)
+
     def set(self, mask, column, value):        
         mask = self._get_row_filter(mask)
         _values = []       
