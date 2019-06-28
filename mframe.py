@@ -219,6 +219,8 @@ class DataFrame(object):
         return self.get(name)
 
     def __len__(self):
+        if len(self._values) = 0:
+            return 0
         return len(self._values[0])
         
     def __repr__(self):
