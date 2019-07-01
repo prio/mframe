@@ -63,7 +63,12 @@ class Series:
         else:
             return Series([op(data, other) for data in self.data])
 
-    def _operator_apply(self, other, op):
+    def _operator_apply(self, other, op_, reverse=False):
+        if reverse:
+            op = lambda x, y: op_(y, x)
+        else:
+            op = op_
+
         _values = []
         if isinstance(other, (list, Series)):
             for s, o in zip(self.data, other):
@@ -105,6 +110,15 @@ class Series:
 
     def __mul__(self, other):
         return self._operator_apply(other, operator.mul)
+
+    def __rsub__(self, other):
+        return self._operator_apply(other, operator.sub, reverse=True)
+
+    def __rmul__(self, other):
+        return self._operator_apply(other, operator.mul)
+
+    def __radd__(self, other):
+        return self._operator_apply(other, operator.add)
 
     def __len__(self):
         return len(self.data)

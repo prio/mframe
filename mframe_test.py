@@ -107,6 +107,10 @@ class TestSeries(unittest.TestCase):
             [4]*10,
             list(s1*2),
         )
+        self.assertListEqual(
+            [4]*10,
+            list(2*s1),
+        )
 
     def test_addition(self):
         s1 = Series([2]*10)
@@ -118,6 +122,10 @@ class TestSeries(unittest.TestCase):
         self.assertListEqual(
             [4]*10,
             list(s1+2),
+        )
+        self.assertListEqual(
+            [4]*10,
+            list(2+s1),
         )
 
     def test_subtraction(self):
@@ -131,6 +139,14 @@ class TestSeries(unittest.TestCase):
             [4]*10,
             list(s1-2),
         )
+        self.assertListEqual(
+            [4]*10,
+            list(10-s1),
+        )
+
+    def test_sum(self):
+        s1 = Series([2]*10)
+        self.assertEqual(20, sum(s1))
 
 
 class TestDataFrame(unittest.TestCase):
@@ -149,15 +165,14 @@ class TestDataFrame(unittest.TestCase):
         items = self.df.get('price')
         for price, expected in zip(items, expected_result):
             self.assertEqual(str(price), str(expected['price']))
-
         items = self.df.get('space')
         self.assertListEqual(
-            [None]*12,
+            [None]*18,
             list(items)
         )
         items = self.df.get('space', 0)
         self.assertListEqual(
-            [0]*12,
+            [0]*18,
             list(items)
         )
 
@@ -179,6 +194,20 @@ class TestDataFrame(unittest.TestCase):
         self.assertEqual(12, len(rows))
         self.assertEqual('aapl', rows[0]['tick'])
         self.assertEqual('msft', rows[5]['tick'])
+
+    def test_sum(self):
+        self.df['price'] = self.df.price.apply(float)
+        self.assertEqual(1631.12, sum(self.df.get('price')))
+
+        self.df['price_a'] = self.df.price
+        self.df['price_b'] = self.df.price
+        #summed = round(sum(self.df.get('price_{}'.format(p), 0) for p in ['a', 'b']), 2)
+        # s1 = [self.df.get('price_{}'.format(p), 0) for p in ['a', 'b']]
+        # s11 = [self.df.pd.get('price_{}'.format(p), 0) for p in ['a', 'b']]
+        # import pdb; pdb.set_trace()
+        # s2 = sum(s1)
+        # summed = round(s2, 2)
+        # self.assertEqual(1631.12*2, summed)
 
 
 class TestDataFrameSugar(unittest.TestCase):
