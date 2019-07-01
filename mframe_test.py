@@ -57,7 +57,7 @@ positions = {
         'aapl', 'goog', 'msft',
         'aapl', 'goog', 'msft',
         'aapl', 'goog', 'msft',
-        'aapl', 'goog', 'msft', 
+        'aapl', 'goog', 'msft',
     ],
     'position': [
         'open   ', 'close      ', 'close   ',
@@ -130,7 +130,7 @@ class TestSeries(unittest.TestCase):
         self.assertListEqual(
             [4]*10,
             list(s1-2),
-        )        
+        )
 
 
 class TestDataFrame(unittest.TestCase):
@@ -140,15 +140,26 @@ class TestDataFrame(unittest.TestCase):
 
     def test_apply(self):
         for date in self.df.get('date'):
-            self.assertIsInstance(date, str)        
+            self.assertIsInstance(date, str)
         self.df['date'] = self.df['date'].apply(str_to_dt)
         for date in self.df['date']:
-            self.assertIsInstance(date, dt.datetime)  
+            self.assertIsInstance(date, dt.datetime)
 
     def test_get(self):
         items = self.df.get('price')
         for price, expected in zip(items, expected_result):
             self.assertEqual(str(price), str(expected['price']))
+
+        items = self.df.get('space')
+        self.assertListEqual(
+            [None]*12,
+            list(items)
+        )
+        items = self.df.get('space', 0)
+        self.assertListEqual(
+            [0]*12,
+            list(items)
+        )
 
     def test_set(self):
         self.df.set([True]*len(self.df), 'position', None)
@@ -222,14 +233,14 @@ class TestDataFrameSugar(unittest.TestCase):
         self.assertListEqual(
             ['2019-01-02', '2019-01-02', '2019-01-02','2019-01-03', '2019-01-03', '2019-01-03','2019-01-04', '2019-01-04', '2019-01-04'],
             list(df['date']),
-        )        
+        )
 
     def test_drop(self):
         results = self.df['date'] == '2019-01-02'
         self.assertEqual(18, len(self.df))
         self.df.drop(results)
         self.assertEqual(15, len(self.df))
-        
+
         results = self.df['date'] == '2019-01-02'
         self.assertEqual(0, len(self.df[results]))
 
@@ -246,7 +257,7 @@ class TestDataFrameSugar(unittest.TestCase):
 
     def test_drop_all(self):
         self.df.drop('all')
-        self.assertEqual(0, len(self.df))        
+        self.assertEqual(0, len(self.df))
 
     def test_contains(self):
         self.assertIn('date', self.df)
@@ -255,11 +266,11 @@ class TestDataFrameSugar(unittest.TestCase):
     def test_features(self):
         self.df['date'] = self.df['date'].apply(str_to_dt)
         self.df['price'] = self.df['price'].apply(to_float)
-        
-        self.pdf['date'] = self.pdf['date'].apply(str_to_dt)        
+
+        self.pdf['date'] = self.pdf['date'].apply(str_to_dt)
         self.pdf['position'] = self.pdf['position'].apply(lambda x: x.strip())
-        
-        for row in self.pdf.iterrows():    
+
+        for row in self.pdf.iterrows():
             sset = (self.df['date'] >= row['date']) & (self.df['tick'] == row['tick'])
             self.df.set(sset, 'position', row['position'])
 
@@ -275,8 +286,8 @@ class TestTimeSeries(unittest.TestCase):
         self.df['date'] = self.df['date'].apply(str_to_dt)
 
     def test_parse_date(self):
-        dates = [ 
-            '2019-26-06', 
+        dates = [
+            '2019-26-06',
             '26-06-2019',
             '2019-06-26',
             '2019-06-26T10:54:55',
@@ -331,7 +342,7 @@ class TestJavaTimeSeries(unittest.TestCase):
         self.assertListEqual(
             [d3]*3 + [d4]*3 + [d5]*3 + [d6]*3,
             list(df['date']),
-        )        
+        )
 
     @jython_only
     def test_filter_with_java_dates(self):
@@ -348,7 +359,7 @@ class TestJavaTimeSeries(unittest.TestCase):
         self.assertListEqual(
             [d3]*3 + [d4]*3 + [d5]*3 + [d6]*3,
             list(df['date']),
-        ) 
+        )
 
 
 if __name__ == '__main__':

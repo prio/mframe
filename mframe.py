@@ -43,7 +43,7 @@ class Series:
 
     def _dtype(self):
         if len(self) > 0 and isinstance(self.data[0], dt.datetime) or (IS_JYTHON and isinstance(self.data[0], JavaDate)):
-            return 'datetime'        
+            return 'datetime'
         return 'object'
 
     def __iter__(self):
@@ -70,7 +70,7 @@ class Series:
                 _values.append(op(s, o))
         else:
             _values = [op(s, other) for s in self.data]
-        return Series(_values)            
+        return Series(_values)
 
     def apply(self, fn):
         self.data = [fn(value) for value in self.data]
@@ -118,12 +118,12 @@ class Series:
 
 class DataFrame(object):
     # As the dataframe object does not allow setting columns via
-    # attribute access, we take some pre-cautions to prevent it 
+    # attribute access, we take some pre-cautions to prevent it
     # happening accidently.
-    __slots__ = ['data', '_values', '_columns', '_selected_column'] # Python 3  
+    __slots__ = ['data', '_values', '_columns', '_selected_column'] # Python 3
 
     # __slots__ not supported in Jython
-    def _slot(self, attr, value): 
+    def _slot(self, attr, value):
         super(DataFrame, self).__setattr__(attr, value)
 
     def __setattr__(self, name, value):
@@ -140,17 +140,23 @@ class DataFrame(object):
             self._slot('_values', values)
             self._slot('_columns', columns)
 
-    def get(self, column):
+    def _get(self, column):
         if isinstance(column, Series): # Filter
             _vals = [[] for _ in range(len(self._values))] # Empty list of lists
             for i, value in enumerate(column):
                 if value:
                     for j, value in enumerate(self._values):
                         _vals[j].append(value[i])
-            return DataFrame(values=_vals, columns=self._columns)        
+            return DataFrame(values=_vals, columns=self._columns)
 
         idx = self._columns.index(column)
         return Series(self._values[idx])
+
+    def get(self, column, default=None):
+        try:
+            return self._get(column)
+        except ValueError:
+            return Series([default]*len(self))
 
     def _get_row_filter(self, mask):
         if isinstance(mask, str) and mask == 'all':
@@ -162,7 +168,7 @@ class DataFrame(object):
                     _index.append(True)
                 else:
                     _index.append(False)
-            mask = _index   
+            mask = _index
         return mask
 
     def drop(self, mask):
@@ -176,26 +182,26 @@ class DataFrame(object):
             _values.append(_row_values)
         self._slot('_values', _values)
 
-    def set(self, mask, column, value):        
+    def set(self, mask, column, value):
         mask = self._get_row_filter(mask)
-        _values = []       
+        _values = []
         try:
             idx = self._columns.index(column)
         except ValueError: # Add New Column
             self._columns.append(column)
             idx = self._columns.index(column)
             self._values.append([None]*len(self))
-        
+
         for i, (should_apply, current_value) in enumerate(zip(mask, self._values[idx])):
             if should_apply:
                 if isinstance(value, (Series, list)):
                     _values.append(value[i])
-                else:                    
+                else:
                     _values.append(value)
             else:
                 _values.append(current_value)
-        self._values[idx] = _values            
-                
+        self._values[idx] = _values
+
     def iterrows(self):
         for i in range(len(self)):
             row = {}
@@ -208,7 +214,7 @@ class DataFrame(object):
         for idx, column in enumerate(self._columns):
             d[column] = self._values[idx]
         return d
-    
+
     def to_pandas(self):
         import pandas
         return pandas.DataFrame(self.to_dict())
@@ -228,25 +234,24 @@ class DataFrame(object):
         return tabulate(cut_values, headers=self._columns)
 
     def __getitem__(self, name):
-        return self.get(name)
+        return self._get(name)
 
     def __setitem__(self, name, value):
         self.set('all', name, value)
 
     def __getattr__(self, name):
-        return self.get(name)
+        return self._get(name)
 
     def __len__(self):
         if len(self._values) == 0:
             return 0
         return len(self._values[0])
-        
+
     def __repr__(self):
         return str(self.to_dict())
-    
+
     def __str__(self):
         return str(self.to_dict())
 
     def __contains__(self, value):
         return value in self._columns
-
