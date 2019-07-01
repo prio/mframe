@@ -95,6 +95,44 @@ expected_result = [
 ]
 
 
+class TestSeries(unittest.TestCase):
+    def test_multiplication(self):
+        s1 = Series([2]*10)
+        s2 = Series([2]*10)
+        self.assertListEqual(
+            [4]*10,
+            list(s1*s2),
+        )
+        self.assertListEqual(
+            [4]*10,
+            list(s1*2),
+        )
+
+    def test_addition(self):
+        s1 = Series([2]*10)
+        s2 = [2]*10
+        self.assertListEqual(
+            [4]*10,
+            list(s1+s2),
+        )
+        self.assertListEqual(
+            [4]*10,
+            list(s1+2),
+        )
+
+    def test_subtraction(self):
+        s1 = Series([6]*10)
+        s2 = Series([2]*10)
+        self.assertListEqual(
+            [4]*10,
+            list(s1-s2),
+        )
+        self.assertListEqual(
+            [4]*10,
+            list(s1-2),
+        )        
+
+
 class TestDataFrame(unittest.TestCase):
     def setUp(self):
         self.df = DataFrame(tickers)

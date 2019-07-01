@@ -43,7 +43,7 @@ class Series:
 
     def _dtype(self):
         if len(self) > 0 and isinstance(self.data[0], dt.datetime) or (IS_JYTHON and isinstance(self.data[0], JavaDate)):
-            return 'datetime'
+            return 'datetime'        
         return 'object'
 
     def __iter__(self):
@@ -58,10 +58,19 @@ class Series:
     def _compare(self, other, op):
         if self.dtype == 'datetime':
             other = self._dt_conversion(other)
-        if isinstance(other, list):
+        if isinstance(other, (list, Series)):
             return op(self.data, other)
         else:
             return Series([op(data, other) for data in self.data])
+
+    def _operator_apply(self, other, op):
+        _values = []
+        if isinstance(other, (list, Series)):
+            for s, o in zip(self.data, other):
+                _values.append(op(s, o))
+        else:
+            _values = [op(s, other) for s in self.data]
+        return Series(_values)            
 
     def apply(self, fn):
         self.data = [fn(value) for value in self.data]
@@ -87,6 +96,15 @@ class Series:
 
     def __and__(self, other):
         return Series([all([b1, b2]) for b1, b2 in zip(self.data, other)])
+
+    def __add__(self, other):
+        return self._operator_apply(other, operator.add)
+
+    def __sub__(self, other):
+        return self._operator_apply(other, operator.sub)
+
+    def __mul__(self, other):
+        return self._operator_apply(other, operator.mul)
 
     def __len__(self):
         return len(self.data)
