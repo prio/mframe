@@ -219,7 +219,7 @@ class DataFrame(object):
         return self.get(name)
 
     def __len__(self):
-        if len(self._values) = 0:
+        if len(self._values) == 0:
             return 0
         return len(self._values[0])
         
@@ -228,3 +228,7 @@ class DataFrame(object):
     
     def __str__(self):
         return str(self.to_dict())
+
+    def __contains__(self, value):
+        return value in self._columns
+

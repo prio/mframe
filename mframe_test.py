@@ -210,7 +210,11 @@ class TestDataFrameSugar(unittest.TestCase):
         self.df.drop('all')
         self.assertEqual(0, len(self.df))        
 
-    def test_features(self):        
+    def test_contains(self):
+        self.assertIn('date', self.df)
+        self.assertNotIn('season', self.df)
+
+    def test_features(self):
         self.df['date'] = self.df['date'].apply(str_to_dt)
         self.df['price'] = self.df['price'].apply(to_float)
         

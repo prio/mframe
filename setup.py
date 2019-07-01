@@ -7,7 +7,7 @@ import os
 import sys
 
 
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -60,7 +60,7 @@ setup(
     author='Jonathan Harrington',
     author_email='jonathan@jonharrington.org',
     url='https://github.com/prio/mframe',
-    license='BSD',
+    license='BSD-2-Clause',
     py_modules=['mframe'],
     classifiers=[
         # Trove classifiers
