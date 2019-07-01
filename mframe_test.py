@@ -12,6 +12,13 @@ def jython_only(f):
     return wrapper
 
 
+def cpython_only(f):
+    def wrapper(*args, **kwargs):
+        if not IS_JYTHON:
+            f(*args, **kwargs)
+    return wrapper
+
+
 def str_to_dt(s):
     return dt.datetime.strptime(s, '%Y-%m-%d')
 
@@ -147,6 +154,11 @@ class TestSeries(unittest.TestCase):
     def test_sum(self):
         s1 = Series([2]*10)
         self.assertEqual(20, sum(s1))
+
+    @cpython_only
+    def test_round(self):
+        s1 = Series([2.123]*10)
+        self.assertEqual([2.1]*10, round(s1, 1))
 
 
 class TestDataFrame(unittest.TestCase):

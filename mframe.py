@@ -120,6 +120,10 @@ class Series:
     def __radd__(self, other):
         return self._operator_apply(other, operator.add)
 
+    def __round__(self, value):
+        self.data = [round(x, value) for x in self.data]
+        return self
+
     def __len__(self):
         return len(self.data)
 
