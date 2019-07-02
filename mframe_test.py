@@ -406,5 +406,161 @@ class TestJavaTimeSeries(unittest.TestCase):
         )
 
 
+ohlc = {
+    'tick': [
+        'aapl', 'aapl', 'aapl', 'aapl', 
+        'goog', 'goog', 'goog', 'goog', 
+        'msft', 'msft', 'msft', 'msft', 
+
+        'aapl', 'aapl', 'aapl', 'aapl', 
+        'goog', 'goog', 'goog', 'goog', 
+        'msft', 'msft', 'msft', 'msft', 
+
+        'aapl', 'aapl', 'aapl', 'aapl', 
+        'goog', 'goog', 'goog', 'goog', 
+        'msft', 'msft', 'msft', 'msft', 
+
+        'aapl', 'aapl', 'aapl', 'aapl', 
+        'goog', 'goog', 'goog', 'goog', 
+        'msft', 'msft', 'msft', 'msft', 
+
+        'aapl', 'aapl', 'aapl', 'aapl', 
+        'goog', 'goog', 'goog', 'goog', 
+        'msft', 'msft', 'msft', 'msft', 
+
+        'aapl', 'aapl', 'aapl', 'aapl', 
+        'goog', 'goog', 'goog', 'goog', 
+        'msft', 'msft', 'msft', 'msft',                                         
+    ],
+    'date': [
+        '2019-01-01', '2019-01-01', '2019-01-01', '2019-01-01',
+        '2019-01-01', '2019-01-01', '2019-01-01', '2019-01-01',
+        '2019-01-01', '2019-01-01', '2019-01-01', '2019-01-01',
+
+        '2019-01-02', '2019-01-02', '2019-01-02', '2019-01-02',
+        '2019-01-02', '2019-01-02', '2019-01-02', '2019-01-02',
+        '2019-01-02', '2019-01-02', '2019-01-02', '2019-01-02',
+
+        '2019-01-03', '2019-01-03', '2019-01-03', '2019-01-03',
+        '2019-01-03', '2019-01-03', '2019-01-03', '2019-01-03',
+        '2019-01-03', '2019-01-03', '2019-01-03', '2019-01-03',
+
+        '2019-01-04', '2019-01-04', '2019-01-04', '2019-01-04',
+        '2019-01-04', '2019-01-04', '2019-01-04', '2019-01-04',
+        '2019-01-04', '2019-01-04', '2019-01-04', '2019-01-04',
+
+        '2019-01-05', '2019-01-05', '2019-01-05', '2019-01-05',
+        '2019-01-05', '2019-01-05', '2019-01-05', '2019-01-05',
+        '2019-01-05', '2019-01-05', '2019-01-05', '2019-01-05',
+
+        '2019-01-06', '2019-01-06', '2019-01-06', '2019-01-06',
+        '2019-01-06', '2019-01-06', '2019-01-06', '2019-01-06',
+        '2019-01-06', '2019-01-06', '2019-01-06', '2019-01-06',
+    ],
+    'time': [
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',
+        'open', 'high', 'low', 'close',                                
+    ],
+    'price': [
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,                                
+    ],           
+    'qty': [
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,
+        100,    123, 45.67, 100,                                
+    ],      
+}
+
+
+class TestPivot(unittest.TestCase):
+    def test_pivot(self):
+        df = DataFrame(tickers)
+        df['price'] = df.price.apply(float)
+
+        self.assertEqual(len(df), 18)
+        self.assertNotIn('aapl', df)
+
+        df = df.pivot(index='date', columns='tick', values='price')
+        self.assertEqual(len(df), 6)
+        self.assertIn('aapl', df)
+        self.assertIn('goog', df)
+        self.assertIn('msft', df)
+
+        self.assertEqual(100, df['aapl'][0])
+        self.assertEqual(100.10, df['aapl'][1])
+
+    def test_pivot_table(self):        
+        df = DataFrame(ohlc)
+        df = df.pivot_table(index=['date', 'tick'], values=['price', 'qty'], columns=['time'], fill_value=0)
+        self.assertIn('price_open', df)
+        self.assertIn('price_high', df)
+        self.assertIn('qty_open', df)
+        self.assertIn('qty_high', df)
+        self.assertEqual(len(df), 18)
+        print(df.pd)
+
 if __name__ == '__main__':
     unittest.main()

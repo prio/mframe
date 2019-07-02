@@ -239,6 +239,59 @@ class DataFrame(object):
         import pandas
         return pandas.DataFrame(self.to_dict())
 
+    def pivot(self, index, columns, values):
+        iidx = self._columns.index(index)
+        cidx = self._columns.index(columns)
+        vidx = self._columns.index(values)
+        _values = { index: set() }
+        for column in self._values[cidx]:
+            _values[column] = []
+        for idx, col, val in zip(self._values[iidx], self._values[cidx], self._values[vidx]):
+            _values[index].add(idx)
+            _values[col].append(val)
+        return DataFrame(_values)
+
+    def pivot_table(self, index, values, columns, fill_value=None):
+        # Build shape
+        _values = {}
+        for i in index:
+            _values[i] = []
+        for value_column in values:
+            for c in columns:
+                cidx = self._columns.index(c)
+                for column in self._values[cidx]:
+                    _values['{}_{}'.format(value_column, column)] = []
+
+        for column in columns:
+            column_values = set(self[column])
+            combos = set()
+            for index_values in zip(*self.get(index)._values):
+                if index_values not in combos: # Make sure we dont revist the same index combination
+                    combos.add(index_values)
+                    
+                    filters = []
+                    for idx, idx_val in zip(index, index_values):
+                        filters.append((self[idx] == idx_val)) # Filter by each index value
+                        _values[idx].append(idx_val) # and add index values while looping
+
+                    # Combine filter results (list of bools) into 1 filter
+                    combined_filters = []
+                    for pair in zip(*filters):
+                        combined_filters.append(all(pair))
+                    # Get the filtered subset
+                    sset = self[Series(combined_filters)]
+
+                    for column_value in column_values:
+                        for value_column in values:
+                            value = sset[sset[column] == column_value][value_column]
+                            if len(value) > 0:
+                                value = value[0]
+                            else:
+                                value = fill_value
+                            _values['{}_{}'.format(value_column, column_value)].append(value)
+
+        return DataFrame(_values)
+
     @property
     def pd(self):
         return self.to_pandas()
