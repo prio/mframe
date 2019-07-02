@@ -413,7 +413,7 @@ ohlc = {
         'msft', 'msft', 'msft', 'msft', 
 
         'aapl', 'aapl', 'aapl', 'aapl', 
-        'goog', 'goog', 'goog', 'goog', 
+        'goog', 'goog', 'goog',
         'msft', 'msft', 'msft', 'msft', 
 
         'aapl', 'aapl', 'aapl', 'aapl', 
@@ -438,7 +438,7 @@ ohlc = {
         '2019-01-01', '2019-01-01', '2019-01-01', '2019-01-01',
 
         '2019-01-02', '2019-01-02', '2019-01-02', '2019-01-02',
-        '2019-01-02', '2019-01-02', '2019-01-02', '2019-01-02',
+        '2019-01-02', '2019-01-02', '2019-01-02',
         '2019-01-02', '2019-01-02', '2019-01-02', '2019-01-02',
 
         '2019-01-03', '2019-01-03', '2019-01-03', '2019-01-03',
@@ -463,7 +463,7 @@ ohlc = {
         'open', 'high', 'low', 'close',
 
         'open', 'high', 'low', 'close',
-        'open', 'high', 'low', 'close',
+        'open', 'high', 'low',
         'open', 'high', 'low', 'close',
 
         'open', 'high', 'low', 'close',
@@ -488,7 +488,7 @@ ohlc = {
         100,    123, 45.67, 100,
 
         100,    123, 45.67, 100,
-        100,    123, 45.67, 100,
+        100,    123, 45.67,
         100,    123, 45.67, 100,
 
         100,    123, 45.67, 100,
@@ -513,7 +513,7 @@ ohlc = {
         100,    123, 45.67, 100,
 
         100,    123, 45.67, 100,
-        100,    123, 45.67, 100,
+        100,    123, 45.67,
         100,    123, 45.67, 100,
 
         100,    123, 45.67, 100,
@@ -560,6 +560,9 @@ class TestPivot(unittest.TestCase):
         self.assertIn('qty_open', df)
         self.assertIn('qty_high', df)
         self.assertEqual(len(df), 18)
+        # Fill missing
+        missing_price = df[(df.date == '2019-01-02') & (df.tick == 'goog')].price_close[0]
+        self.assertEqual(missing_price, 0)
 
 
 if __name__ == '__main__':

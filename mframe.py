@@ -42,8 +42,9 @@ class Series:
         self.dtype = self._dtype()
 
     def _dtype(self):
-        if len(self) > 0 and isinstance(self.data[0], dt.datetime) or (IS_JYTHON and isinstance(self.data[0], JavaDate)):
-            return 'datetime'
+        if len(self) > 0:
+            if isinstance(self.data[0], dt.datetime) or (IS_JYTHON and isinstance(self.data[0], JavaDate)):
+                return 'datetime'
         return 'object'
 
     def __iter__(self):
