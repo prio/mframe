@@ -159,6 +159,8 @@ class DataFrame(object):
             self._slot('_columns', columns)
 
     def _get(self, column):
+        if isinstance(column, list): # Multiple select
+            return DataFrame({c: self.get(c) for c in column})
         if isinstance(column, Series): # Filter
             _vals = [[] for _ in range(len(self._values))] # Empty list of lists
             for i, value in enumerate(column):

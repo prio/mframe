@@ -182,11 +182,18 @@ class TestDataFrame(unittest.TestCase):
             [None]*18,
             list(items)
         )
+        # Doesnt exist
         items = self.df.get('space', 0)
         self.assertListEqual(
             [0]*18,
             list(items)
-        )
+        )        
+        # Select multiple columns
+        items = self.df.get(['price', 'tick'])        
+        for price, expected in zip(items.price, expected_result):
+            self.assertEqual(str(price), str(expected['price']))
+        for tick, expected in zip(items.tick, expected_result):
+            self.assertEqual(str(tick), str(expected['tick']))
 
     def test_set(self):
         self.df.set([True]*len(self.df), 'position', None)
@@ -211,16 +218,6 @@ class TestDataFrame(unittest.TestCase):
         self.df['price'] = self.df.price.apply(float)
         self.assertEqual(1631.12, sum(self.df.get('price')))
 
-        self.df['price_a'] = self.df.price
-        self.df['price_b'] = self.df.price
-        #summed = round(sum(self.df.get('price_{}'.format(p), 0) for p in ['a', 'b']), 2)
-        # s1 = [self.df.get('price_{}'.format(p), 0) for p in ['a', 'b']]
-        # s11 = [self.df.pd.get('price_{}'.format(p), 0) for p in ['a', 'b']]
-        # import pdb; pdb.set_trace()
-        # s2 = sum(s1)
-        # summed = round(s2, 2)
-        # self.assertEqual(1631.12*2, summed)
-
 
 class TestDataFrameSugar(unittest.TestCase):
     def setUp(self):
@@ -233,6 +230,12 @@ class TestDataFrameSugar(unittest.TestCase):
         self.assertIsInstance(items, Series)
         for price, expected in zip(items, expected_result):
             self.assertEqual(str(price), str(expected['price']))
+        # Select multiple columns
+        items = self.df[['price', 'tick']]
+        for price, expected in zip(items.price, expected_result):
+            self.assertEqual(str(price), str(expected['price']))
+        for tick, expected in zip(items.tick, expected_result):
+            self.assertEqual(str(tick), str(expected['tick']))            
         # Attribute access
         items = self.df.tick
         self.assertIsInstance(items, Series)
