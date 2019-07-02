@@ -560,7 +560,7 @@ class TestPivot(unittest.TestCase):
         self.assertIn('qty_open', df)
         self.assertIn('qty_high', df)
         self.assertEqual(len(df), 18)
-        print(df.pd)
+
 
 if __name__ == '__main__':
     unittest.main()
