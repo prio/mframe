@@ -112,6 +112,18 @@ class Series:
     def __mul__(self, other):
         return self._operator_apply(other, operator.mul)
 
+    def __div__(self, other):
+        return self._operator_apply(other, operator.truediv)
+
+    def __truediv__(self, other):
+        return self._operator_apply(other, operator.truediv)
+
+    def __rdiv__(self, other):
+        return self._operator_apply(other, operator.truediv, reverse=True)
+
+    def __rtruediv__(self, other):
+        return self._operator_apply(other, operator.truediv, reverse=True)
+
     def __rsub__(self, other):
         return self._operator_apply(other, operator.sub, reverse=True)
 

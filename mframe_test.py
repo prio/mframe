@@ -151,6 +151,26 @@ class TestSeries(unittest.TestCase):
             list(10-s1),
         )
 
+    def test_division(self):
+        s1 = Series([6]*10)
+        s2 = Series([2]*10)
+        self.assertListEqual(
+            [3]*10,
+            list(s1/s2),
+        )
+        self.assertListEqual(
+            [3]*10,
+            list(s1/2),
+        )
+        self.assertListEqual(
+            [1.2]*10,
+            list(s1/5),
+        )        
+        self.assertListEqual(
+            [5]*10,
+            list(10/s2),
+        )
+
     def test_sum(self):
         s1 = Series([2]*10)
         self.assertEqual(20, sum(s1))
