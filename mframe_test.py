@@ -99,22 +99,6 @@ expected_result = [
 
 
 class TestSeries(unittest.TestCase):
-    def test_multiplication(self):
-        s1 = Series([2]*10)
-        s2 = Series([2]*10)
-        self.assertListEqual(
-            [4]*10,
-            list(s1*s2),
-        )
-        self.assertListEqual(
-            [4]*10,
-            list(s1*2),
-        )
-        self.assertListEqual(
-            [4]*10,
-            list(2*s1),
-        )
-
     def test_addition(self):
         s1 = Series([2]*10)
         s2 = [2]*10
@@ -129,6 +113,11 @@ class TestSeries(unittest.TestCase):
         self.assertListEqual(
             [4]*10,
             list(2+s1),
+        )
+        s1 += 2
+        self.assertListEqual(
+            [4]*10,
+            list(s1),
         )
 
     def test_subtraction(self):
@@ -146,6 +135,32 @@ class TestSeries(unittest.TestCase):
             [4]*10,
             list(10-s1),
         )
+        s1 -= 2
+        self.assertListEqual(
+            [4]*10,
+            list(s1),
+        )        
+
+    def test_multiplication(self):
+        s1 = Series([2]*10)
+        s2 = Series([2]*10)
+        self.assertListEqual(
+            [4]*10,
+            list(s1*s2),
+        )
+        self.assertListEqual(
+            [4]*10,
+            list(s1*2),
+        )
+        self.assertListEqual(
+            [4]*10,
+            list(2*s1),
+        )
+        s1 *= 2
+        self.assertListEqual(
+            [4]*10,
+            list(s1),
+        )        
 
     def test_division(self):
         s1 = Series([6]*10)
@@ -166,6 +181,11 @@ class TestSeries(unittest.TestCase):
             [5]*10,
             list(10/s2),
         )
+        s1 /= 2
+        self.assertListEqual(
+            [3]*10,
+            list(s1),
+        )        
 
     def test_sum(self):
         s1 = Series([2]*10)
