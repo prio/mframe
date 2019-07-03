@@ -28,10 +28,6 @@ def str_to_java_date(s):
     return SimpleDateFormat('yyy-MM-dd').parse(s)
 
 
-def to_float(f):
-    return float(f)
-
-
 tickers = {
     'tick': [
         'aapl', 'goog', 'msft',
@@ -329,7 +325,7 @@ class TestDataFrameSugar(unittest.TestCase):
 
     def test_features(self):
         self.df['date'] = self.df['date'].apply(str_to_dt)
-        self.df['price'] = self.df['price'].apply(to_float)
+        self.df['price'] = self.df['price'].apply(float)
 
         self.pdf['date'] = self.pdf['date'].apply(str_to_dt)
         self.pdf['position'] = self.pdf['position'].apply(lambda x: x.strip())

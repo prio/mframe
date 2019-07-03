@@ -23,6 +23,7 @@ Usage
 
 It's goal is to be familar to pandas users without promising 100% compatability. My workflow usually involves writing the code in a Jupyter notebook using Python 3 and then testing it with Jython before deploying it to Streamsets.
 
+Please see the test file for more usage examples.
 
     >>> from mframe import DataFrame
     >>> data = {'col_1': [3, 2, 1, 0], 'col_2': ['a', 'b', 'c', 'd']}
