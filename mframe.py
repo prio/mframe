@@ -137,6 +137,10 @@ class Series:
         self.data = [round(x, value) for x in self.data]
         return self
 
+    def __abs__(self):
+        _data = [abs(x) for x in self.data]
+        return Series(_data)
+
     def __len__(self):
         return len(self.data)
 

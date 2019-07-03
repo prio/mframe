@@ -187,6 +187,13 @@ class TestSeries(unittest.TestCase):
             list(s1),
         )        
 
+    def test_abs(self):
+        s1 = Series([-6]*10)
+        self.assertListEqual(
+            [6]*10,
+            list(abs(s1)),            
+        )
+
     def test_sum(self):
         s1 = Series([2]*10)
         self.assertEqual(20, sum(s1))
