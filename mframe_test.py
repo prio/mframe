@@ -209,6 +209,18 @@ class TestDataFrame(unittest.TestCase):
         self.df = DataFrame(tickers)
         self.pdf = DataFrame(positions)
 
+    def test_creation(self):
+        data = [list(x.values()) for x in self.df.iterrows()]
+        df = DataFrame(values=data, columns=list(tickers.keys()))
+        self.assertEqual(
+            self.df.tick[5],
+            df.tick[5],
+        )
+        self.assertEqual(
+            self.df.price[7],
+            df.price[7],
+        )        
+
     def test_apply(self):
         for date in self.df.get('date'):
             self.assertIsInstance(date, str)

@@ -166,14 +166,14 @@ class DataFrame(object):
     #########
 
     def __init__(self, data=None, values=None, columns=None):
-        if data is not None:
-            self._slot('data', data)
-            # TODO Test shape
-            self._slot('_values', list(data.values()))
-            self._slot('_columns', list(data.keys()))
-        else:
-            self._slot('_values', values)
-            self._slot('_columns', columns)
+        if data is None:
+            data = {column: [] for column in columns}
+            for row in values:
+                for i, column in enumerate(columns):
+                    data[column].append(row[i])
+        # TODO Test shape
+        self._slot('_values', list(data.values()))
+        self._slot('_columns', list(data.keys()))
 
     def _get(self, column):
         if isinstance(column, list): # Multiple select
@@ -184,7 +184,7 @@ class DataFrame(object):
                 if value:
                     for j, value in enumerate(self._values):
                         _vals[j].append(value[i])
-            return DataFrame(values=_vals, columns=self._columns)
+            return DataFrame(values=list(map(list, zip(*_vals))), columns=self._columns)
 
         idx = self._columns.index(column)
         return Series(self._values[idx])
