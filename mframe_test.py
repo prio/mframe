@@ -2,7 +2,6 @@ import unittest
 from mframe import DataFrame, Series, parse_date, IS_JYTHON
 import datetime as dt
 import time
-from tabulate import tabulate
 
 
 def jython_only(f):

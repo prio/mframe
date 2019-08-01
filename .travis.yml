@@ -16,4 +16,4 @@ before_install:
   - if [ -n "$JYTHON" ]; then export CLASSPATH=$VIRTUAL_ENV/javalib/*; fi
     
 script:
-  - make test
+  - python mframe_test.py
