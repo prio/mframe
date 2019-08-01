@@ -68,7 +68,8 @@ Tested on
 - Jython 2.7
 
 
-.. |maintenance| image:: https://img.shields.io/badge/Maintained-yes-green.svg
+.. |maintenance| image:: https://img.shields.io/badge/maintained-yes-green.svg
+   :target: https://github.com/prio/mframe
 .. |version| image:: https://badge.fury.io/py/mframe.svg
    :target: https://pypi.org/project/mframe/
 .. |build| image:: https://travis-ci.org/prio/mframe.svg?branch=master
