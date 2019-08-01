@@ -70,6 +70,8 @@ Tested on
 
 .. |maintenance| image:: https://img.shields.io/badge/Maintained-yes-green.svg
 .. |version| image:: https://badge.fury.io/py/mframe.svg
+   :target: https://pypi.org/project/mframe/
 .. |build| image:: https://travis-ci.org/prio/mframe.svg?branch=master
+   :target: https://travis-ci.org/prio/mframe
 .. |nbsp| unicode:: 0xA0
      :trim:
