@@ -2,6 +2,8 @@
 MFrame - A minimal DataFrame
 ============================
 
+|maintenance| |nbsp| |version| |nbsp| |build|
+
 
 A lightweight single file DataFrame implementation that works on older Python distrubtions such as Jython.
 
@@ -64,3 +66,10 @@ Tested on
 
 - Python 3.7
 - Jython 2.7
+
+
+.. |maintenance| image:: https://img.shields.io/badge/Maintained-yes-green.svg
+.. |version| image:: https://badge.fury.io/py/mframe.svg
+.. |build| image:: https://travis-ci.org/prio/mframe.svg?branch=master
+.. |nbsp| unicode:: 0xA0
+     :trim:
