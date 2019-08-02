@@ -8,9 +8,9 @@ matrix:
     - python: 2.7
       env: JYTHON_VERSION=2.7.1
 
-before_install:
+install:
   - if [ -n "$JYTHON_VERSION" ]; then wget http://repo1.maven.org/maven2/org/python/jython-installer/$JYTHON_VERSION/jython-installer-$JYTHON_VERSION.jar; fi
   - if [ -n "$JYTHON_VERSION" ]; then java -jar jython-installer-$JYTHON_VERSION.jar -s -d $HOME/jython; fi
-    
+  
 script:
-  - make test
+  - make testci
