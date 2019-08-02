@@ -6,12 +6,11 @@ python:
 matrix:
   include:
     - python: 2.7
-      env: JYTHON=org.python:jython-installer:2.7.1
+      env: JYTHON_VERSION=2.7.1
 
 before_install:
-  - if [ -n "$JYTHON" ]; then travis_wait ./before_install_jython.sh; source $HOME/myvirtualenv/bin/activate ;fi
-  - if [ -n "$JYTHON" ]; then pip install jip==0.9.13; fi
-  - if [ -n "$JYTHON" ]; then export CLASSPATH=$VIRTUAL_ENV/javalib/*; fi
+  - if [ -n "$JYTHON_VERSION" ]; then wget http://repo1.maven.org/maven2/org/python/jython-installer/$JYTHON_VERSION/jython-installer-$JYTHON_VERSION.jar; fi
+  - if [ -n "$JYTHON_VERSION" ]; then java -jar jython-installer-$JYTHON_VERSION.jar -s -d $HOME/jython; fi
     
 script:
-  - python mframe_test.py
+  - make test
